@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "Scheduled",
+    "slug": "scheduled",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "ios": { "supportsTablet": true },
+    "android": { "minSdkVersion": 23 },
+    "web": { "bundler": "metro" }
+  }
+}
