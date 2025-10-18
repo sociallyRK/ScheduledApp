@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Scheduled",
+    "name": "SchedNativeIOS",
     "slug": "scheduled",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -30,7 +30,12 @@
     "privacy": "public",
     "owner": "rahulkhanna0328",
     "ios": {
-      "bundleIdentifier": "com.rahulkhanna0328.scheduled"
+      "bundleIdentifier": "com.scheduled.schednativeios",
+      "projectName": "SchedNativeIOS",
+      "scheme": "schednativeios",
+      "infoPlist": {
+        "CFBundleDisplayName": "SchedNativeIOS"
+      }
     },
     "extra": {
       "eas": {
