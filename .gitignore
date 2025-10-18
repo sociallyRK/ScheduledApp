@@ -1,1 +1,8 @@
+node_modules/
 .expo/
+dist/
+android/app/build/
+android/.gradle/
+ios/Pods/
+*.keystore
+.DS_Store
