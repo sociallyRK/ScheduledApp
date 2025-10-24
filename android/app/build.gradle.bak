@@ -1,0 +1,51 @@
+plugins {
+  id 'com.android.application'
+  id 'org.jetbrains.kotlin.android'
+  id 'com.facebook.react'
+}
+android {
+  def keystoreProps = new Properties()
+  def kf = rootProject.file("android/keystore.properties")
+  if (kf.exists()) { kf.withInputStream { keystoreProps.load(it) } }
+  signingConfigs {
+    release {
+      if (keystoreProps["storeFile"]) {
+        storeFile file(keystoreProps["storeFile"])
+        storePassword keystoreProps["storePassword"]
+        keyAlias keystoreProps["keyAlias"]
+        keyPassword keystoreProps["keyPassword"]
+      }
+    }
+  }
+  namespace "com.scheduledapp"
+  compileSdk 35
+  defaultConfig {
+    applicationId "com.scheduledapp"
+    minSdk 24
+    targetSdk 35
+    versionCode 30
+    versionName "1.0.30"
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      shrinkResources false
+      proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+      signingConfig signingConfigs.release
+    }
+    debug { debuggable true }
+    release {
+      minifyEnabled false
+      shrinkResources false
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),'proguard-rules.pro'
+    }
+  }
+  buildFeatures { buildConfig true }
+  compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+  kotlinOptions { jvmTarget = '17' }
+  packagingOptions { jniLibs { useLegacyPackaging = true } }
+}
+dependencies {
+  implementation "com.facebook.react:react-android:0.76.0"
+  implementation "com.facebook.react:hermes-android:0.76.0"
+}

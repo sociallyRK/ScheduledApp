@@ -1,0 +1,9 @@
+MYAPP_UPLOAD_STORE_FILE=/Users/rahulkhanna/scheduled-upload-new.jks
+MYAPP_UPLOAD_KEY_ALIAS=upload
+MYAPP_UPLOAD_STORE_PASSWORD=Rk$$9211$$
+MYAPP_UPLOAD_KEY_PASSWORD=Rk$$9211$$
+org.gradle.jvmargs=-Xmx4g
+android.useAndroidX=true
+android.enableJetifier=true
+hermesEnabled=true
+newArchEnabled=false

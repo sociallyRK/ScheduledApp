@@ -1,0 +1,95 @@
+plugins {
+  id 'com.android.application'
+  id 'org.jetbrains.kotlin.android'
+  id 'com.facebook.react'
+}
+android {
+  namespace "com.scheduledapp"
+  compileSdk 35
+  defaultConfig {
+    applicationId "com.scheduledapp"
+    minSdk 24
+    targetSdk 35
+    versionCode 31
+    versionName "1.0.31"
+  }
+  signingConfigs {
+    release {
+      def props = new Properties()
+      def f = rootProject.file("android/keystore.properties")
+      if (f.canRead()) {
+        f.withInputStream { props.load(it) }
+        storeFile file(props['storeFile'])
+        storePassword props['storePassword']
+        keyAlias props['keyAlias']
+        keyPassword props['keyPassword']
+      }
+    }
+  }
+  buildTypes {
+    debug { debuggable true }
+    release {
+      signingConfig signingConfigs.release
+      minifyEnabled false
+      shrinkResources false
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+    }
+  }
+  buildFeatures { buildConfig true }
+  compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+  kotlinOptions { jvmTarget = '17' }
+  packagingOptions { jniLibs { useLegacyPackaging = true } }
+}
+dependencies {
+  implementation "com.facebook.react:react-android:0.76.0"
+  implementation "com.facebook.react:hermes-android:0.76.0"
+  implementation "com.facebook.soloader:soloader:0.10.5"
+}
+
+def autolinkJson = file("$rootDir/android/build/generated/autolinking/autolinking.json")
+
+tasks.register("prepareAutolinkingJson") {
+    outputs.file(autolinkJson)
+    doLast {
+        autolinkJson.parentFile.mkdirs()
+        exec {
+            workingDir rootDir
+            commandLine("bash", "-lc", "npx react-native config > \"${autolinkJson.absolutePath}\"")
+        }
+        if (!autolinkJson.exists() || autolinkJson.length() == 0L) {
+            throw new GradleException("autolinking.json was not produced")
+        }
+    }
+}
+
+tasks.matching { it.name == "generateAutolinkingPackageList" }.configureEach {
+    dependsOn("prepareAutolinkingJson")
+    inputs.file(autolinkJson)
+}
+
+afterEvaluate {
+    def autolinkJson = file("$rootDir/android/build/generated/autolinking/autolinking.json")
+
+    tasks.register("prepareAutolinkingJsonFix") {
+        outputs.file(autolinkJson)
+        doLast {
+            println "🔧 Preparing autolinking.json..."
+            autolinkJson.parentFile.mkdirs()
+            exec {
+                workingDir rootDir
+                commandLine "bash", "-lc", "npx react-native config > \"${autolinkJson.absolutePath}\""
+            }
+            if (!autolinkJson.exists() || autolinkJson.length() == 0L) {
+                throw new GradleException("❌ autolinking.json missing or empty")
+            } else {
+                println "✅ autolinking.json ready (${autolinkJson.length()} bytes)"
+            }
+        }
+    }
+
+    tasks.matching { it.name == "generateAutolinkingPackageList" }.configureEach {
+        dependsOn "prepareAutolinkingJsonFix"
+        mustRunAfter "prepareAutolinkingJsonFix"
+        inputs.file autolinkJson
+    }
+}
