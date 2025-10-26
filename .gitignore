@@ -10,3 +10,7 @@ ios/build/
 *.iml
 .bundle
 .env
+node_modules/
+android/app/build/
+ios/build/
+.env
