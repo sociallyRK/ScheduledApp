@@ -8,6 +8,7 @@ android {
     namespace "com.rahulkhanna0328.scheduled"
     namespace "com.rahulkhanna0328.scheduled"
     namespace "com.rahulkhanna0328.scheduled"
+    namespace "com.rahulkhanna0328.scheduled"
   namespace "com.rahulkhanna0328.scheduled"
   compileSdkVersion rootProject.ext.compileSdkVersion
 
